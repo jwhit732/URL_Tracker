@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Rto {
+  id           String        @id @default(cuid())
+  rtoCode      String        @unique
+  rtoName      String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  trackedLinks TrackedLink[]
+
+  @@map("rtos")
+}
+
+model LinkBatch {
+  id             String        @id @default(cuid())
+  destinationUrl String
+  label          String?
+  createdAt      DateTime      @default(now())
+  trackedLinks   TrackedLink[]
+
+  @@map("link_batches")
+}
+
+model TrackedLink {
+  id             String       @id @default(cuid())
+  batchId        String
+  rtoId          String
+  slug           String       @unique
+  destinationUrl String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  batch          LinkBatch    @relation(fields: [batchId], references: [id])
+  rto            Rto          @relation(fields: [rtoId], references: [id])
+  clickEvents    ClickEvent[]
+
+  @@map("tracked_links")
+}
+
+model ClickEvent {
+  id              String      @id @default(cuid())
+  trackedLinkId   String
+  rtoCodeSnapshot String
+  rtoNameSnapshot String
+  clickedAt       DateTime    @default(now())
+  ipAddress       String?
+  userAgent       String?
+  referer         String?
+  trackedLink     TrackedLink @relation(fields: [trackedLinkId], references: [id])
+
+  @@map("click_events")
+}
+
+model DigestRun {
+  id             String   @id @default(cuid())
+  runAt          DateTime @default(now())
+  clickCount     Int
+  uniqueRtoCount Int
+  status         String
+
+  @@map("digest_runs")
+}
