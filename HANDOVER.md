@@ -268,7 +268,7 @@ npx prisma generate            # regenerate client after schema change
 - Build script is `prisma generate && next build` — Prisma Client is generated fresh on each deploy
 - ESLint: upgraded to v9, config is `eslint.config.mjs` (ESM flat config), legacy `.eslintrc.json` removed
 - Production database (Neon): migration `20260308000000_init` applied — all 5 tables live
-- Required Vercel env vars: `DATABASE_URL` ✅ set, `DIRECT_URL` ⚠️ must be added (non-pooler URL — same as DATABASE_URL but without `-pooler` in the hostname)
+- Required Vercel env vars: `DATABASE_URL` ✅, `DIRECT_URL` ✅ — all set
 
 ## Build verified
 
