@@ -1,6 +1,6 @@
 # RTO Link Tracker — Handover Notes
 
-Last updated: 2026-03-08
+Last updated: 2026-03-08 (session 2)
 Stack: Next.js 16, TypeScript strict, Tailwind CSS 3, Prisma 5, Postgres, Resend
 
 ---
@@ -78,7 +78,7 @@ link-tracker/
 │       ├── migration_lock.toml
 │       └── 20260308000000_init/
 │           └── migration.sql
-├── eslint.config.js              # Flat config (Next.js 16 style)
+├── eslint.config.mjs             # Flat config (Next.js 16 style, ESM)
 ├── jest.config.js
 ├── next.config.ts
 ├── postcss.config.js
@@ -263,6 +263,13 @@ npx prisma generate            # regenerate client after schema change
 
 ---
 
+## Vercel deployment status
+
+- Build script is `prisma generate && next build` — Prisma Client is generated fresh on each deploy
+- ESLint: upgraded to v9, config is `eslint.config.mjs` (ESM flat config), legacy `.eslintrc.json` removed
+- Production database (Neon): migration `20260308000000_init` applied — all 5 tables live
+- Required Vercel env vars: `DATABASE_URL` ✅ set, `DIRECT_URL` ⚠️ must be added (non-pooler URL — same as DATABASE_URL but without `-pooler` in the hostname)
+
 ## Build verified
 
 `npm run build` passes cleanly as of 2026-03-08. All four routes compile:
@@ -277,7 +284,7 @@ npx prisma generate            # regenerate client after schema change
 
 1. **`postcss.config.js` must stay as CJS** (`module.exports`). Do not convert to ESM or rename to `.mjs` — Tailwind's PostCSS integration expects CommonJS here.
 
-2. **`eslint.config.js` is ESM** (uses `import`). Node prints a harmless performance warning about this. Suppressing it requires adding `"type": "module"` to `package.json`, which would break `postcss.config.js`. Leave it as-is.
+2. **`eslint.config.mjs` is ESM** (uses `import`). The `.mjs` extension is required so Node treats it as ESM without needing `"type": "module"` in `package.json` (which would break `postcss.config.js`).
 
 3. **`useActionState` is from `react`** (not `react-dom`). The older `useFormState` from `react-dom` is deprecated in React 19.
 
