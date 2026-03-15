@@ -8,7 +8,10 @@
       "Bash(npm run:*)",
       "Bash(npx next:*)",
       "Bash(python:*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(mv:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_J6lSGYokuIe3@ep-sparkling-hat-a7kftmr5.ap-southeast-2.aws.neon.tech/neondb?sslmode=require\" npx prisma:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_J6lSGYokuIe3@ep-sparkling-hat-a7kftmr5-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require\" DIRECT_URL=\"postgresql://neondb_owner:npg_J6lSGYokuIe3@ep-sparkling-hat-a7kftmr5.ap-southeast-2.aws.neon.tech/neondb?sslmode=require\" npx prisma:*)"
     ]
   }
 }
